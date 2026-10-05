@@ -8,7 +8,10 @@ This case study analyzes vehicle specifications, engine characteristics, fuel ty
 
 The project covers data cleaning, exploratory data analysis, correlation analysis, multicollinearity detection using VIF, feature selection, categorical encoding, regression modeling, and model evaluation.
 
----
+### Kaggle Notebook
+
+[View and run the notebook on Kaggle](https://www.kaggle.com/code/venkateshprasad107/co-emission-prediction-for-automotive-policy)
+
 
 ## 🎯 Objectives
 
