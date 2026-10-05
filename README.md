@@ -69,6 +69,14 @@ The analysis included:
 
 The analysis showed that **fuel consumption, engine size, and number of cylinders** have strong relationships with CO₂ emissions.
 
+### CO₂ Emissions Distribution
+
+![CO₂ Emissions Distribution](images/CO2_distribution.png)
+
+### Numerical Features vs CO₂ Emissions
+
+![Numerical Features vs CO₂ Emissions](images/numeric_features_vs_co2.png)
+
 ---
 
 ## 🔗 Correlation Analysis
@@ -82,6 +90,10 @@ The selected numerical variables showed the following correlations with CO₂ em
 | Fuel Consumption Comb (L/100 km) |                         0.9170 |
 
 **Fuel Consumption Comb (L/100 km)** showed the strongest correlation with CO₂ emissions among the selected numerical features.
+
+### Correlation Heatmap
+
+![Correlation Heatmap](images/correlation_heatmap.png)
 
 ---
 
@@ -168,6 +180,12 @@ The final model comparison from the notebook is:
 | Linear Regression    |     0.938439 |     0.939308 |     222.1386 |
 | Ridge Regression     |     0.938477 |     0.939351 |     221.9834 |
 | **Lasso Regression** | **0.938978** | **0.939616** | **221.0140** |
+
+
+### Model Performance Comparison
+
+![Model Performance Comparison](images/model_performance_comparison.png)
+
 
 ### Final Model
 
