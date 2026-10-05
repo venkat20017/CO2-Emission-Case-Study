@@ -4,7 +4,7 @@
 
 The Global Automotive Council aims to understand the key factors influencing vehicle CO₂ emissions and explore data-driven strategies for emission reduction.
 
-This case study analyzes vehicle specifications, engine characteristics, fuel types, and fuel consumption patterns to identify the major factors associated with CO₂ emissions and develop a simple, interpretable predictive model.
+This case study analyzes vehicle specifications, engine characteristics, fuel type, and fuel consumption to identify the major factors associated with CO₂ emissions and develop a simple, interpretable predictive model.
 
 The project covers data cleaning, exploratory data analysis, correlation analysis, multicollinearity detection using VIF, feature selection, categorical encoding, regression modeling, and model evaluation.
 
@@ -18,9 +18,9 @@ The project covers data cleaning, exploratory data analysis, correlation analysi
 * Identify multicollinearity among numerical features using VIF
 * Select relevant and interpretable features for modeling
 * Compare Linear Regression, Ridge Regression, and Lasso Regression
-* Evaluate model performance using R² and other regression metrics
-* Identify the key factors influencing vehicle CO₂ emissions
-* Provide insights that can support automotive design and policy decisions
+* Evaluate model performance using R² and MSE
+* Identify key factors associated with vehicle CO₂ emissions
+* Derive data-supported insights for automotive design and policy decisions
 
 ---
 
@@ -49,7 +49,7 @@ The dataset contains information about vehicles, including:
 
 No missing values were identified in the dataset.
 
-A total of **1,103 duplicate records** were identified and removed.
+A total of **1,103 duplicate records** were identified and removed, leaving **6,282 unique observations** for analysis.
 
 ---
 
@@ -73,7 +73,7 @@ The analysis showed that **fuel consumption, engine size, and number of cylinder
 
 ## 🔗 Correlation Analysis
 
-The final selected numerical variables showed the following correlations with CO₂ emissions:
+The selected numerical variables showed the following correlations with CO₂ emissions:
 
 | Feature                          | Correlation with CO₂ Emissions |
 | -------------------------------- | -----------------------------: |
@@ -81,7 +81,7 @@ The final selected numerical variables showed the following correlations with CO
 | Cylinders                        |                         0.8347 |
 | Fuel Consumption Comb (L/100 km) |                         0.9170 |
 
-Fuel Consumption Comb (L/100 km) showed the strongest correlation with CO₂ emissions among the selected numerical features.
+**Fuel Consumption Comb (L/100 km)** showed the strongest correlation with CO₂ emissions among the selected numerical features.
 
 ---
 
@@ -89,23 +89,23 @@ Fuel Consumption Comb (L/100 km) showed the strongest correlation with CO₂ emi
 
 Variance Inflation Factor (VIF) was used to identify multicollinearity among numerical predictors.
 
-Initially, the fuel-consumption variables showed very high VIF values, indicating substantial redundancy.
+Initially, the fuel-consumption variables showed extremely high VIF values, indicating substantial redundancy.
 
-For example:
+Examples:
 
 * Fuel Consumption Comb (L/100 km): **5045.26**
 * Fuel Consumption City (L/100 km): **2225.28**
 * Fuel Consumption Hwy (L/100 km): **623.63**
 
-To reduce redundancy, highly correlated fuel-consumption variables were removed.
+Redundant fuel-consumption variables were removed to simplify the feature set and reduce multicollinearity.
 
-The final numerical features were:
+### Final Numerical Features
 
 * Engine Size(L)
 * Cylinders
 * Fuel Consumption Comb (L/100 km)
 
-Final VIF values:
+### Final VIF Values
 
 | Feature                          |  VIF |
 | -------------------------------- | ---: |
@@ -113,13 +113,13 @@ Final VIF values:
 | Cylinders                        | 7.35 |
 | Fuel Consumption Comb (L/100 km) | 3.08 |
 
-These features were retained for model building.
+All final VIF values are below 10, so the three numerical features were retained for modeling.
 
 ---
 
 ## 🛠️ Feature Preparation
 
-The final model used:
+The final model uses a compact feature set consisting of:
 
 ### Numerical Features
 
@@ -131,9 +131,11 @@ The final model used:
 
 * Fuel Type
 
-Categorical variables were converted into numerical representations using **One-Hot Encoding**.
+The categorical feature was transformed using **One-Hot Encoding**.
 
-Numerical features were standardized using **StandardScaler** as part of the modeling pipeline.
+Numerical features were standardized using **StandardScaler**.
+
+Both preprocessing steps were implemented within a scikit-learn pipeline to keep preprocessing consistent during model training and evaluation.
 
 ---
 
@@ -141,35 +143,45 @@ Numerical features were standardized using **StandardScaler** as part of the mod
 
 Three regression models were developed and compared:
 
-1. Linear Regression
-2. Ridge Regression
-3. Lasso Regression
+1. **Linear Regression** — baseline model
+2. **Ridge Regression** — L2 regularization
+3. **Lasso Regression** — L1 regularization
 
-Cross-validation and model evaluation were used to compare their predictive performance.
+Five-fold cross-validation was used during model evaluation and hyperparameter tuning.
+
+### Selected Hyperparameters
+
+| Model             | Selected Alpha |
+| ----------------- | -------------: |
+| Linear Regression |              — |
+| Ridge Regression  |            0.1 |
+| Lasso Regression  |         0.0001 |
 
 ---
 
 ## 📈 Model Performance
 
-| Model             |    Test R² | Train R² |
-| ----------------- | ---------: | -------: |
-| Linear Regression |     0.9393 |   0.9384 |
-| Ridge Regression  |     0.9394 |   0.9385 |
-| Lasso Regression  | **0.9396** |   0.9390 |
+The final model comparison from the notebook is:
+
+| Model                |     Train R² |      Test R² |     Test MSE |
+| -------------------- | -----------: | -----------: | -----------: |
+| Linear Regression    |     0.938439 |     0.939308 |     222.1386 |
+| Ridge Regression     |     0.938477 |     0.939351 |     221.9834 |
+| **Lasso Regression** | **0.938978** | **0.939616** | **221.0140** |
 
 ### Final Model
 
-**Lasso Regression** was selected as the final model because it achieved the highest Test R² score of approximately **0.94**.
+**Lasso Regression** was selected as the final model because it achieved the highest Test R²:
 
-The close relationship between Train and Test R² indicates that the models generalize well without significant overfitting.
+**Test R² = 0.9396**
 
-The final Lasso model explains approximately **94% of the variation in CO₂ emissions** in the test data.
+This means the model explains approximately **94% of the variation in CO₂ emissions** on the test data.
+
+The close Train and Test R² values indicate that there is no substantial gap between training and test performance.
 
 ---
 
 ## 💡 Key Findings
-
-The analysis identified the following major factors associated with CO₂ emissions:
 
 ### 1. Fuel Consumption
 
@@ -187,19 +199,21 @@ Vehicles with more cylinders generally showed higher emission levels.
 
 ### 4. Fuel Type
 
-Fuel type also contributed to differences in CO₂ emission levels.
+Fuel type contributed to differences in observed CO₂ emission levels.
+
+These relationships should be interpreted as **associations rather than causal effects**.
 
 ---
 
 ## 🌍 Business & Policy Insights
 
-These findings can support automotive decision-making in several ways:
+The analysis suggests several areas that could support automotive decision-making:
 
-* Manufacturers can focus on improving fuel efficiency.
-* Engine specifications can be optimized to reduce emissions.
-* Policymakers can develop fuel-efficiency regulations.
-* Emission standards can be informed by vehicle characteristics.
-* Incentives can be designed to encourage lower-emission vehicles.
+* Improving fuel efficiency can help reduce vehicle emissions.
+* Engine and cylinder configurations can be considered when designing lower-emission vehicles.
+* Fuel-efficiency standards can be informed by vehicle characteristics.
+* Vehicle characteristics can be considered when developing emission-reduction strategies.
+* Further analysis could investigate how vehicle configuration and fuel type interact with emission levels.
 
 ---
 
@@ -222,6 +236,7 @@ These findings can support automotive decision-making in several ways:
 CO2-Emission-Case-Study/
 │
 ├── data/
+│   └── Automotive_CO2_Emissions.csv
 │
 ├── images/
 │
@@ -239,7 +254,19 @@ CO2-Emission-Case-Study/
 
 ## 📓 Notebook
 
-The complete analysis, visualizations, feature selection process, VIF analysis, model development, and evaluation are available in the project notebook.
+The complete analysis is available in the project notebook, including:
+
+* Data cleaning
+* Exploratory data analysis
+* Correlation analysis
+* VIF-based multicollinearity analysis
+* Feature selection
+* Feature preprocessing
+* Regression modeling
+* Hyperparameter tuning
+* Model evaluation
+* Residual analysis
+* Interpretation of results
 
 ---
 
